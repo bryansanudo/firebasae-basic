@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/configFirebase";
 
 const Requiriments = ({ id }) => {
-  const [requiriments, setRequiriments] = useState({
+  const [requiriment, setRequiriment] = useState({
     title: "",
     description: "",
   });
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
 
   const handleChange = (e) => {
-    setRequiriments({ ...requiriments, [e.target.name]: e.target.value });
+    setRequiriment({ ...requiriment, [e.target.name]: e.target.value });
   };
 
-  const addDb = (e) => {
+  const addDb = async (e) => {
     e.preventDefault();
     const requisitos = data.requisitos;
-    console.log(requisitos);
-    requisitos.push(requiriments);
+    /* console.log(requisitos); */
+    requisitos.push(requiriment);
 
-    console.log(data);
+    /* console.log(data); */
+
+    await setDoc(doc(db, "expedientes", id), data);
   };
 
   const getData = async () => {
@@ -54,6 +56,11 @@ const Requiriments = ({ id }) => {
         />
         <button onClick={addDb}>agregar requirimiento</button>
       </form>
+      <div>
+        {data.requisitos?.map((r) => (
+          <div>{r.title}</div>
+        ))}
+      </div>
     </>
   );
 };
