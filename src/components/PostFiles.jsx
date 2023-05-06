@@ -17,6 +17,7 @@ const PostFiles = () => {
     vigenciaContrato: "",
     origenRecurso: "",
     programaPresupuestal: "",
+    requisitos: [],
   };
 
   const [file, setFile] = useState(expediente);

@@ -1,27 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/configFirebase";
+import Requiriments from "@/components/Requiriments";
 
 const DetailsPage = () => {
   const { id } = useParams();
+  const [details, setDetails] = useState({});
 
   const getData = async () => {
     const docRef = doc(db, "expedientes", id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      setDetails(docSnap.data());
     } else {
-      // docSnap.data() will be undefined in this case
       console.log("No such document!");
     }
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
-      <button onClick={getData}>detalles</button>
-      <div></div>
+      <div>{details.montoEjercido}</div>
+      <div>{details.partidaPresupuestal}</div>
+      <Requiriments id={id} />
     </>
   );
 };
